@@ -266,7 +266,6 @@
         <activity
             android:name=".forms.ContactUS"
             android:screenOrientation="portrait" />
-        <activity android:name=".forms.Task_Add" />
         <activity android:name=".forms.About_us" />
         <activity android:name=".forms.ContactDashBoard" />
         <activity

@@ -73,6 +73,7 @@ public class NewOrderAdapter extends RecyclerView.Adapter<NewOrderAdapterViewHol
         final model_notification timeLineModel = mFeedList.get(position);
 
         holder.mStops.setText(timeLineModel.msg + "");
+        holder.popup_counter.setText(timeLineModel.createdon+"");
 //        holder.Cash_amount.setText(String.format("%.2f", Double.parseDouble(timeLineModel.amt)));
         holder.mOulets.setText(timeLineModel.title+"");
 //        holder.mTime.setText(timeLineModel.pcktm);

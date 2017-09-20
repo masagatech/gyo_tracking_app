@@ -169,7 +169,11 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                                 public void onCompleted(Exception e, JsonObject result) {
                                     // do stuff with the result or error
                                     try {
-                                        if (result != null) Log.v("result", result.toString());
+                                        if (result != null) {
+                                            Log.v("result", result.toString());
+                                        }else {
+                                            Toast.makeText(login.this, "No Internet", Toast.LENGTH_SHORT).show();
+                                        }
 //                                    JsonObject Data=  result.get("data").getAsJsonObject();
 //                                    EnttId=Data.get("enttid").toString();
                                         // JSONObject jsnobject = new JSONObject(jsond);
@@ -202,7 +206,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                                         }
 
                                     } catch (Exception ea) {
-                                        Toast.makeText(login.this, "Error: " + ea.getMessage(), Toast.LENGTH_LONG).show();
+//                                        Toast.makeText(login.this, "Error: " + ea.getMessage(), Toast.LENGTH_LONG).show();
                                         ea.printStackTrace();
                                     }
                                     Global.hideProgress(loader);

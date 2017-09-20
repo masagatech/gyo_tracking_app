@@ -16,12 +16,10 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.adapters.NewOrderAdapter;
 import com.goyo.traveltracker.database.SQLBase;
-import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.model.model_notification;
 import com.koushikdutta.async.future.FutureCallback;
@@ -29,8 +27,6 @@ import com.koushikdutta.ion.Ion;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.goyo.traveltracker.R.id.txtNodata;
@@ -185,44 +181,44 @@ public class newOrder extends AppCompatActivity {
         }
     }
 
-    private void setDataListItems(){
-
-        lst.clear();
-        JsonParser parser = new JsonParser();
-        List<HashMap<String,String>> d = db.NOTIFICATION_GET();
-        for (int i=0;i<=d.size() -1; i++){
-            try{
-                String autoid = "", createon = "", data = "";
-                Integer expTm = 3;
-                autoid =  d.get(i).get(Tables.tblnotification.autoid);
-                createon = d.get(i).get(Tables.tblnotification.createon);
-                data = d.get(i).get(Tables.tblnotification.data);
-                expTm = Integer.parseInt(d.get(i).get(Tables.tblnotification.exp));
-                Date date2 = simpleDateFormat.parse(createon);
-                Date date1  = new Date();
-                long difference = date1.getTime() - date2.getTime();
-                Integer minutes = (int) (difference / (1000 * 60));
-                long milisec = (long) (difference);
-                if(minutes > expTm){
-                    db.NOTIFICATION_DELETE(autoid);
-                }else {
-                    JsonObject obj = parser.parse(data).getAsJsonObject();
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<model_notification>() {
-                    }.getType();
-                    model_notification m = gson.fromJson(obj, listType);
-                    m.autoid = Integer.parseInt(autoid);
-                    m.createdon = date2;
-                    m.remaintime = (expTm * 60* 1000) - milisec;
-                    lst.add(m);
-                }
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-
-    }
+//    private void setDataListItems(){
+//
+//        lst.clear();
+//        JsonParser parser = new JsonParser();
+//        List<HashMap<String,String>> d = db.NOTIFICATION_GET();
+//        for (int i=0;i<=d.size() -1; i++){
+//            try{
+//                String autoid = "", createon = "", data = "";
+//                Integer expTm = 3;
+//                autoid =  d.get(i).get(Tables.tblnotification.autoid);
+//                createon = d.get(i).get(Tables.tblnotification.createon);
+//                data = d.get(i).get(Tables.tblnotification.data);
+//                expTm = Integer.parseInt(d.get(i).get(Tables.tblnotification.exp));
+//                Date date2 = simpleDateFormat.parse(createon);
+//                Date date1  = new Date();
+//                long difference = date1.getTime() - date2.getTime();
+//                Integer minutes = (int) (difference / (1000 * 60));
+//                long milisec = (long) (difference);
+//                if(minutes > expTm){
+//                    db.NOTIFICATION_DELETE(autoid);
+//                }else {
+//                    JsonObject obj = parser.parse(data).getAsJsonObject();
+//                    Gson gson = new Gson();
+//                    Type listType = new TypeToken<model_notification>() {
+//                    }.getType();
+//                    model_notification m = gson.fromJson(obj, listType);
+//                    m.autoid = Integer.parseInt(autoid);
+//                    m.createdon = date2;
+//                    m.remaintime = (expTm * 60* 1000) - milisec;
+//                    lst.add(m);
+//                }
+//
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
+//        }
+//
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

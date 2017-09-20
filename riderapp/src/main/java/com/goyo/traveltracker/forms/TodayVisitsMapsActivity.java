@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -267,8 +266,26 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
             lineOptions.width(7);
             lineOptions.color(Color.BLACK);
 
+
+
 //            mMap.addPolyline(lineOptions);
             polylineFinal = mMap.addPolyline (lineOptions);
+
+            //Starting and End markers
+            mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                    .position(Map.get(0))
+                    .title("End Point")
+//                    .snippet("")
+                    .flat(true));
+
+            mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    .position(Map.get(Map.size()-1))
+                    .title("Start Point")
+//                    .snippet("")
+                    .flat(true));
+
 
             List<LatLng> latlngs = lineOptions.getPoints();
             int size = latlngs.size() - 1;
@@ -392,7 +409,7 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
                 j++;
             }
         }else {
-            Toast.makeText(this, "There is no record on selected date! Please choose another date", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "There is no STOPS/TASKS on selected date! Choose another date", Toast.LENGTH_SHORT).show();
         }
 
 

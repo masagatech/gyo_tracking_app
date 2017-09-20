@@ -2,8 +2,6 @@ package com.goyo.traveltracker.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 /**
  * Created by fajar on 03-Jun-17.
  */
@@ -12,7 +10,7 @@ public class model_notification {
 
 
     public Integer autoid;
-    public Date createdon;
+//    public Date createdon;
     public long remaintime;
 
     @SerializedName("ordid")
@@ -32,6 +30,9 @@ public class model_notification {
 
     @SerializedName("msg")
     public String msg;
+
+    @SerializedName("createdon")
+    public String createdon;
 
     @SerializedName("expmin")
     public int expmin;

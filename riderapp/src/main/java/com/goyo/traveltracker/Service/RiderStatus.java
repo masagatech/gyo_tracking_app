@@ -75,15 +75,16 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     private GoogleApiClient mGoogleApiClient;
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 20; // 10 meters
-    private static final long MIN_TIME_BW_UPDATES = 20000; // 20 seconds
-    private static final long FASTEST_TIME_BW_UPDATES = 20000; // 20 seconds
+    private static final int TWO_MINUTES = 1000 * 60 * 2;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    private static final long MIN_TIME_BW_UPDATES = 3000; // 4 seconds
+    private static final long FASTEST_TIME_BW_UPDATES = 3000; // 4 seconds
 
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1000; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 10000; // in Milliseconds
 
 //    private static final Integer NOTIFICATION_CHECKR_TIMER = 8;//seconds
-    private static  Integer LOCATION_SENDER_TIMER = 15;//seconds
+    private static  Integer LOCATION_SENDER_TIMER = 9;//seconds
 
     public static LocationManager locationManager;
     public static Handler handler = new Handler();
@@ -97,6 +98,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     Integer exptm = 3;
     private Location mCurrentLoc;
     private Location mPreviousLoc;
+    private Location currentBestLocation;
     float bearing = 0f,accuracy=0f;
     double altitude=0;
    public static NotificationCompat.Builder mBuilder;
@@ -145,12 +147,12 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
             createLocationRequest();
         }
 
-        mCurrentLoc = LocationServices.FusedLocationApi
+        mPreviousLoc = LocationServices.FusedLocationApi
                 .getLastLocation(mGoogleApiClient);
 
-        if (mCurrentLoc != null) {
-            Rider_Lat = String.valueOf(mCurrentLoc.getLatitude());
-            Rider_Long = String.valueOf(mCurrentLoc.getLongitude());
+        if (mPreviousLoc != null) {
+            Rider_Lat = String.valueOf(mPreviousLoc.getLatitude());
+            Rider_Long = String.valueOf(mPreviousLoc.getLongitude());
 
 //            LatLng position = new LatLng(Double.parseDouble(Rider_Lat), Double.parseDouble(Rider_Long));
 //            MapLoc.add(position);
@@ -166,8 +168,6 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                     int maxAt = 0;
                     int size = detectedActivities.size();
                     if (size > 0) {
-
-
                         int max = detectedActivities.get(0).getConfidence();
                         int pos = 0;
 
@@ -184,7 +184,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                             ActivityRecg=getDetectedActivity(detectedActivities.get(pos).getType());
                             ActivityPerc=detectedActivities.get(pos).getConfidence();
                         if(getDetectedActivity(detectedActivities.get(pos).getType()).equals("Still")||getDetectedActivity(detectedActivities.get(pos).getType()).equals("Tilting")){
-                            activityString="Your On Idle";
+                            activityString="Your Idle";
                         }else if(getDetectedActivity(detectedActivities.get(pos).getType()).equals("On foot")){
                             activityString="Your On Foot";
                         }else if(getDetectedActivity(detectedActivities.get(pos).getType()).equals("Running")){
@@ -210,11 +210,11 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                     e.printStackTrace();
                 }
 
-                //if phone is in "still" send data every 2 min
+                //if phone is in "still" send data every 30 sec
                 if((ActivityRecg.equals("Still")&&ActivityPerc==100)||(ActivityRecg.equals("Tilting")&&ActivityPerc==100)){
-                    LOCATION_SENDER_TIMER=30;
+                    LOCATION_SENDER_TIMER=20;
                 }else {
-                    LOCATION_SENDER_TIMER=15;
+                    LOCATION_SENDER_TIMER=9;
                 }
                 //checkin timer to call
                 //sending data to server in frequency
@@ -222,7 +222,8 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 
                     //send geo data only if its accurate
 //                    if(!(accuracy<=30.0&&((ActivityRecg.equals("Still")&&ActivityPerc==100)||(ActivityRecg.equals("Tilting")&&ActivityPerc==100))))
-                    if(accuracy<=700.0&&!(Rider_Lat.equals("0.0"))&&!(Rider_Long.equals("0.0"))){
+//                    Toast.makeText(context, accuracy+"", Toast.LENGTH_SHORT).show();
+                    if(accuracy<=20&&!(Rider_Lat.equals("0.0"))&&!(Rider_Long.equals("0.0"))){
                         sendingLocationToServer();
                     }
                     LocationTimerResseter = 0;
@@ -431,14 +432,24 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            mCurrentLoc = location;
+
+            if(isBetterLocation(location, mPreviousLoc)) {
+                currentBestLocation = location;
+                mCurrentLoc=location;
+
+                Rider_Lat = String.valueOf(currentBestLocation.getLatitude());
+                Rider_Long = String.valueOf(currentBestLocation.getLongitude());
+
+
+            }else {
+                mCurrentLoc=location;
+            }
 
             altitude =location.getAltitude();
 
             accuracy =location.getAccuracy();
 
-            Rider_Lat = String.valueOf(location.getLatitude());
-            Rider_Long = String.valueOf(location.getLongitude());
+
 
 
             if (mPreviousLoc != null) {
@@ -447,8 +458,6 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 
 //            LatLng position = new LatLng(Double.parseDouble(Rider_Lat), Double.parseDouble(Rider_Long));
 //            MapLoc.add(position);
-
-            mPreviousLoc = location;
 
         }
 
@@ -471,6 +480,55 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 //
 //    //pub sub socket client
 
+
+    protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+        if (currentBestLocation == null) {
+            // A new location is always better than no location
+            return true;
+        }
+
+        // Check whether the new location fix is newer or older
+        long timeDelta = location.getTime() - currentBestLocation.getTime();
+        boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
+        boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
+        boolean isNewer = timeDelta > 0;
+
+        // If it's been more than two minutes since the current location, use the new location
+        // because the user has likely moved
+        if (isSignificantlyNewer) {
+            return true;
+            // If the new location is more than two minutes older, it must be worse
+        } else if (isSignificantlyOlder) {
+            return false;
+        }
+
+        // Check whether the new location fix is more or less accurate
+        int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
+        boolean isLessAccurate = accuracyDelta > 0;
+        boolean isMoreAccurate = accuracyDelta < 0;
+        boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+        // Check if the old and new location are from the same provider
+        boolean isFromSameProvider = isSameProvider(location.getProvider(),
+                currentBestLocation.getProvider());
+
+        // Determine location quality using a combination of timeliness and accuracy
+        if (isMoreAccurate) {
+            return true;
+        } else if (isNewer && !isLessAccurate) {
+            return true;
+        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isSameProvider(String provider1, String provider2) {
+        if (provider1 == null) {
+            return provider2 == null;
+        }
+        return provider1.equals(provider2);
+    }
 
     private void SocketClient() {
         SC_IOApplication app = new SC_IOApplication();

@@ -1,14 +1,10 @@
 package com.goyo.traveltracker.forms;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
@@ -29,15 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allattentionhere.fabulousfilter.AAH_FabulousFragment;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.api.client.repackaged.com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -77,13 +64,10 @@ import java.util.zip.ZipOutputStream;
 import io.reactivex.functions.Consumer;
 import me.shaohui.advancedluban.Luban;
 
-import static android.app.Activity.RESULT_OK;
 import static com.goyo.traveltracker.Service.NetworkStateReceiver.IsMobailConnected;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Lat;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Long;
-import static com.goyo.traveltracker.forms.dashboard.REQUEST_CHECK_SETTINGS;
 import static com.goyo.traveltracker.forms.dashboard.TripId;
-import static com.goyo.traveltracker.forms.dashboard.mGoogleApiClient;
 import static com.goyo.traveltracker.gloabls.Global.urls.mobileupload;
 
 
@@ -115,6 +99,7 @@ public class NewStops extends AAH_FabulousFragment{
     private Spinner Expense_Type;
     String Selected_Exp,Selected_Value,Selected_Disc,Selected_EXP_Type;
     private ProgressDialog loader;
+    private ImageView Reminder;
 
 
     public static  NewStops newInstance() {
@@ -127,7 +112,7 @@ public class NewStops extends AAH_FabulousFragment{
     @Override
     public void setupDialog(Dialog dialog, int style) {
 
-        settingsrequest();
+//        settingsrequest();
         View contentView = View.inflate(getContext(), R.layout.activity_task__add, null);
         LinearLayout rl_content = (LinearLayout) contentView.findViewById(R.id.rl_content);
 
@@ -147,13 +132,26 @@ public class NewStops extends AAH_FabulousFragment{
 
         //map
         map = (ImageView) contentView.findViewById(R.id.map);
+//        SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map);
+//
+//        mapFragment.getMapAsync(getActivity());
 
         //getting current location
 //        GetLocation();
+//        PhotoDecodeRunnable photoDecodeRunnable=new PhotoDecodeRunnable();
+//        photoDecodeRunnable.run();
 
-        //setting map based on location
-        setMap();
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+////        setting map based on location
+//
+//            }
+//        }, 2000);
 
+
+        Reminder=(ImageView) contentView.findViewById(R.id.reminder) ;
         remark = (EditText) contentView.findViewById(R.id.Task_Body);
         remark_title = (EditText) contentView.findViewById(R.id.Task_Title);
 
@@ -176,6 +174,14 @@ public class NewStops extends AAH_FabulousFragment{
             @Override
             public void onClick(View v) {
                 ExpenseClicked(v);
+            }
+        });
+
+
+        Reminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -286,6 +292,29 @@ public class NewStops extends AAH_FabulousFragment{
         setMainContentView(contentView); // necessary; call at end before super
         super.setupDialog(dialog, style); //call super at last
     }
+
+//    public void to_reminder(View view)
+//    {
+//        Intent intent=new Intent(this,Notification_morning.class);
+//        AlarmManager manager=(AlarmManager)getSystemService(Activity.ALARM_SERVICE);
+//        PendingIntent pendingIntent=PendingIntent.getService(this,
+//                0,intent, 0);
+//        Calendar cal=Calendar.getInstance();
+//        cal.set(Calendar.HOUR_OF_DAY, timepicker.getCurrentHour());
+//        cal.set(Calendar.MINUTE,timepicker.getCurrentMinute());
+//        cal.set(Calendar.SECOND, 0);
+//        cal.set(Calendar.MILLISECOND, 0);
+//        manager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),24*60*60*1000,pendingIntent);
+//
+//    }
+
+//    public class PhotoDecodeRunnable implements Runnable {
+//        @Override
+//        public void run() {
+//
+//            setMap();
+//        }
+//    }
 
     public void ExpenseClicked(View view) {
 
@@ -591,81 +620,81 @@ public class NewStops extends AAH_FabulousFragment{
 //        }
 //    }
 
-    public void settingsrequest() {
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(30 * 1000);
-        locationRequest.setFastestInterval(5 * 1000);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true); //this is the key ingredient
+//    public void settingsrequest() {
+//        LocationRequest locationRequest = LocationRequest.create();
+//        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        locationRequest.setInterval(30 * 1000);
+//        locationRequest.setFastestInterval(5 * 1000);
+//        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+//                .addLocationRequest(locationRequest);
+//        builder.setAlwaysShow(true); //this is the key ingredient
+//
+//        PendingResult<LocationSettingsResult> result =
+//                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
+//        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+//            @Override
+//            public void onResult(LocationSettingsResult result) {
+//                final Status status = result.getStatus();
+//                final LocationSettingsStates state = result.getLocationSettingsStates();
+//                switch (status.getStatusCode()) {
+//                    case LocationSettingsStatusCodes.SUCCESS:
+//                        // All location settings are satisfied. The client can initialize location
+//                        // requests here.
+//                        break;
+//                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+//                        // Location settings are not satisfied. But could be fixed by showing the user
+//                        // a dialog.
+//                        try {
+//                            // Show the dialog by calling startResolutionForResult(),
+//                            // and check the result in onActivityResult().
+//                            status.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
+//                        } catch (IntentSender.SendIntentException e) {
+//                            // Ignore the error.
+//                        }
+//                        break;
+//                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+//                        // Location settings are not satisfied. However, we have no way to fix the
+//                        // settings so we won't show the dialog.
+//                        break;
+//                }
+//            }
+//        });
+//    }
 
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                final LocationSettingsStates state = result.getLocationSettingsStates();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        // All location settings are satisfied. The client can initialize location
-                        // requests here.
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        // Location settings are not satisfied. But could be fixed by showing the user
-                        // a dialog.
-                        try {
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
-                            status.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException e) {
-                            // Ignore the error.
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        // Location settings are not satisfied. However, we have no way to fix the
-                        // settings so we won't show the dialog.
-                        break;
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            // Check for the integer request code originally supplied to startResolutionForResult().
-            case REQUEST_CHECK_SETTINGS:
-                switch (resultCode) {
-                    case RESULT_OK:
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        settingsrequest();//keep asking if imp or do whatever
-                        break;
-                }
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode) {
+//            // Check for the integer request code originally supplied to startResolutionForResult().
+//            case REQUEST_CHECK_SETTINGS:
+//                switch (resultCode) {
+//                    case RESULT_OK:
+//                        break;
+//                    case Activity.RESULT_CANCELED:
+//                        settingsrequest();//keep asking if imp or do whatever
+//                        break;
+//                }
+//                break;
+//        }
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
+//
+//
+//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+//        switch (requestCode) {
+//            case 1: {
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0
+//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                } else {
+//                    // permission denied, boo! Disable the
+//                    // functionality that depends on this permission.
+//                }
+//                return;
+//            }
+//            // other 'case' lines to check for other
+//            // permissions this app might request
+//        }
+//    }
 
 }
