@@ -84,8 +84,8 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1000; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 10000; // in Milliseconds
 
-//    private static final Integer NOTIFICATION_CHECKR_TIMER = 8;//seconds
-    private static  Integer LOCATION_SENDER_TIMER = 9;//seconds
+    //    private static final Integer NOTIFICATION_CHECKR_TIMER = 8;//seconds
+    private static Integer LOCATION_SENDER_TIMER = 15;//seconds
 
     public static LocationManager locationManager;
     public static Handler handler = new Handler();
@@ -100,13 +100,13 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     private Location mCurrentLoc;
     private Location mPreviousLoc;
     private Location currentBestLocation;
-    float bearing = 0f,accuracy=0f;
-    double altitude=0;
-   public static NotificationCompat.Builder mBuilder;
+    float bearing = 0f, accuracy = 0f;
+    double altitude = 0;
+    public static NotificationCompat.Builder mBuilder;
     public static NotificationManager notificationManager;
     private NotificationManager notificationManager2;
-    private String ActivityRecg= "";
-    private int ActivityPerc=0;
+    private String ActivityRecg = "";
+    private int ActivityPerc = 0;
 
 
     //Wakelock
@@ -119,7 +119,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 //    private ActivityDetectionBroadcastReceiver mBroadcastReceiver;
 
     Integer VersionCode;
-//    Integer NotifyTimerResseter = NOTIFICATION_CHECKR_TIMER;
+    //    Integer NotifyTimerResseter = NOTIFICATION_CHECKR_TIMER;
     Integer LocationTimerResseter = LOCATION_SENDER_TIMER;
 
     SQLBase sql;
@@ -176,14 +176,14 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
             @Override
             public void run() {
                 String activityString = "";
-                if(detectedActivities!=null) {
+                if (detectedActivities != null) {
                     int maxAt = 0;
                     int size = detectedActivities.size();
                     if (size > 0) {
                         int max = detectedActivities.get(0).getConfidence();
                         int pos = 0;
 
-                        for(int i=1; i<detectedActivities.size(); i++) {
+                        for (int i = 1; i < detectedActivities.size(); i++) {
                             if (max < detectedActivities.get(i).getConfidence()) {
                                 pos = i;
                                 max = detectedActivities.get(i).getConfidence();
@@ -193,20 +193,20 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 //                            maxAt = detectedActivities.get(i).getConfidence() > detectedActivities.get(maxAt).getConfidence() ? i : maxAt;
 //                        }
 //                        if (detectedActivities.get(pos).getConfidence() > 50) {
-                            ActivityRecg=getDetectedActivity(detectedActivities.get(pos).getType());
-                            ActivityPerc=detectedActivities.get(pos).getConfidence();
-                        if(getDetectedActivity(detectedActivities.get(pos).getType()).equals("Still")||getDetectedActivity(detectedActivities.get(pos).getType()).equals("Tilting")){
-                            activityString="Your Idle";
-                        }else if(getDetectedActivity(detectedActivities.get(pos).getType()).equals("On foot")){
-                            activityString="Your On Foot";
-                        }else if(getDetectedActivity(detectedActivities.get(pos).getType()).equals("Running")){
-                            activityString="Your Running";
-                        }else if(getDetectedActivity(detectedActivities.get(pos).getType()).equals("Walking")){
-                            activityString="Your Walking";
-                        }else if(getDetectedActivity(detectedActivities.get(pos).getType()).equals("In a vehicle")){
-                            activityString="Your In a vehicle";
-                        }else if(getDetectedActivity(detectedActivities.get(pos).getType()).equals("On a bicycle")){
-                            activityString="Your On a bicycle";
+                        ActivityRecg = getDetectedActivity(detectedActivities.get(pos).getType());
+                        ActivityPerc = detectedActivities.get(pos).getConfidence();
+                        if (getDetectedActivity(detectedActivities.get(pos).getType()).equals("Still") || getDetectedActivity(detectedActivities.get(pos).getType()).equals("Tilting")) {
+                            activityString = "Your Idle";
+                        } else if (getDetectedActivity(detectedActivities.get(pos).getType()).equals("On foot")) {
+                            activityString = "Your On Foot";
+                        } else if (getDetectedActivity(detectedActivities.get(pos).getType()).equals("Running")) {
+                            activityString = "Your Running";
+                        } else if (getDetectedActivity(detectedActivities.get(pos).getType()).equals("Walking")) {
+                            activityString = "Your Walking";
+                        } else if (getDetectedActivity(detectedActivities.get(pos).getType()).equals("In a vehicle")) {
+                            activityString = "Your In a vehicle";
+                        } else if (getDetectedActivity(detectedActivities.get(pos).getType()).equals("On a bicycle")) {
+                            activityString = "Your On a bicycle";
                         }
 //                            activityString = getDetectedActivity(detectedActivities.get(pos).getType()) + " : " + detectedActivities.get(pos).getConfidence() + " %";
 //                        }
@@ -223,11 +223,11 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                 }
 
                 //if phone is in "still" send data every 30 sec
-                if((ActivityRecg.equals("Still")&&ActivityPerc==100)||(ActivityRecg.equals("Tilting")&&ActivityPerc==100)){
-                    LOCATION_SENDER_TIMER=20;
-                }else {
-                    LOCATION_SENDER_TIMER=9;
-                }
+//                if((ActivityRecg.equals("Still")&&ActivityPerc==100)||(ActivityRecg.equals("Tilting")&&ActivityPerc==100)){
+//                    LOCATION_SENDER_TIMER=20;
+//                }else {
+//                    LOCATION_SENDER_TIMER=9;
+//                }
                 //checkin timer to call
                 //sending data to server in frequency
                 if (LocationTimerResseter >= LOCATION_SENDER_TIMER) {
@@ -235,9 +235,8 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                     //send geo data only if its accurate
 //                    if(!(accuracy<=30.0&&((ActivityRecg.equals("Still")&&ActivityPerc==100)||(ActivityRecg.equals("Tilting")&&ActivityPerc==100))))
 //                    Toast.makeText(context, accuracy+"", Toast.LENGTH_SHORT).show();
-                    if(accuracy<=100&&!(Rider_Lat.equals("0.0"))&&!(Rider_Long.equals("0.0"))){
-                        sendingLocationToServer();
-                    }
+
+                    sendingLocationToServer();
                     LocationTimerResseter = 0;
                 }
 //                NotifyTimerResseter += 1;
@@ -248,9 +247,6 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
         };
 
         handler1.postDelayed(notify, 2000);
-
-
-
 
 
         if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -279,15 +275,13 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     }
 
 
-
-
     public void showNotification(String Activity) throws ExecutionException, InterruptedException {
         PendingIntent pi = null;
         boolean foregroud = new CheckAppForground().execute(this).get();
-        if(!foregroud) {
-                pi = PendingIntent.getActivity(this, 0, new Intent(this, splash_screen.class), 0);
+        if (!foregroud) {
+            pi = PendingIntent.getActivity(this, 0, new Intent(this, splash_screen.class), 0);
 
-        }else {
+        } else {
             Intent intent = new Intent(context, RiderStatus.class);
             pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         }
@@ -315,7 +309,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 //            locationManager.removeUpdates(this);
 //        }
         mSocket.close();
-        if(notificationManager2!=null) {
+        if (notificationManager2 != null) {
             stopForeground(true);
             notificationManager2.cancel(2);
         }
@@ -330,9 +324,9 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 
         if (isSendToServerInTransit) return;
 
-        if (Rider_Lat == "0.0") return;
+        //if (Rider_Lat == "0.0") return;
 
-        if (wakeLock != null) wakeLock.acquire(5000);
+        if (wakeLock != null) wakeLock.acquire();
 
         isSendToServerInTransit = true;
 
@@ -344,27 +338,26 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 
 
         int speed;
-        if(mCurrentLoc!=null) {
+        if (mCurrentLoc != null) {
             speed = (int) ((mCurrentLoc.getSpeed() * 3600) / 1000);
-        }else {
-            speed=0;
+        } else {
+            speed = 0;
         }
 
         JsonObject json = new JsonObject();
-        json.addProperty("loc", "["+ Rider_Lat+","+Rider_Long+"]");
-        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+        json.addProperty("loc", "[" + Rider_Lat + "," + Rider_Long + "]");
+        json.addProperty("enttid", Global.loginusr.getEnttid() + "");
         json.addProperty("tripid", TripId + "");
-        json.addProperty("flag", "start");
-        json.addProperty("drvid",  riderid + "");
+        json.addProperty("drvid", riderid + "");
         json.addProperty("uid", riderid + "");
         json.addProperty("bearing", bearing + "");
         json.addProperty("btr", getBatteryLevel() + "");
-        json.addProperty("appvr",VersionCode + "");
-        json.addProperty("speed",speed);
-        json.addProperty("alt",altitude);
-        json.addProperty("accr",accuracy);
-        json.addProperty("act",ActivityRecg);
-        json.addProperty("actpr",ActivityPerc);
+        json.addProperty("appvr", VersionCode + "");
+        json.addProperty("speed", speed);
+        json.addProperty("alt", altitude);
+        json.addProperty("accr", accuracy);
+        json.addProperty("act", ActivityRecg);
+        json.addProperty("actpr", ActivityPerc);
 
         Ion.with(this)
                 .load(livebeats.value)
@@ -411,7 +404,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                                     }.getType();
                                     model_notification m = gson.fromJson(data, listType);
 
-                                    sql.NOTIFICATION_INSERT(data.toString(),m.expmin);
+                                    sql.NOTIFICATION_INSERT(data.toString(), m.expmin);
                                     processData(m);
                                 }
                             }
@@ -464,23 +457,21 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     public void onLocationChanged(Location location) {
         if (location != null) {
 
-            if(isBetterLocation(location, mPreviousLoc)) {
-                currentBestLocation = location;
-                mCurrentLoc=location;
+            //if(isBetterLocation(location, mPreviousLoc)) {
+            currentBestLocation = location;
+            mCurrentLoc = location;
 
-                Rider_Lat = String.valueOf(currentBestLocation.getLatitude());
-                Rider_Long = String.valueOf(currentBestLocation.getLongitude());
-
-
-            }else {
-                mCurrentLoc=location;
-            }
-
-            altitude =location.getAltitude();
-
-            accuracy =location.getAccuracy();
+            Rider_Lat = String.valueOf(currentBestLocation.getLatitude());
+            Rider_Long = String.valueOf(currentBestLocation.getLongitude());
 
 
+            //}else {
+            mCurrentLoc = location;
+            //}
+
+            altitude = location.getAltitude();
+
+            accuracy = location.getAccuracy();
 
 
             if (mPreviousLoc != null) {
@@ -575,12 +566,12 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-                    if (!isSocConnected) {
-                        //if(null!=mUsername)
+            if (!isSocConnected) {
+                //if(null!=mUsername)
                         /*Toast.makeText(getApplicationContext(),
                                 "Connected", Toast.LENGTH_LONG).show();*/
-                        isSocConnected = true;
-                    }
+                isSocConnected = true;
+            }
         }
     };
 
@@ -588,8 +579,8 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
         @Override
         public void call(Object... args) {
 
-                    //Log.i(TAG, "diconnected");
-                    isSocConnected = false;
+            //Log.i(TAG, "diconnected");
+            isSocConnected = false;
                     /*Toast.makeText(getApplicationContext(),
                             "Disconnect", Toast.LENGTH_LONG).show();*/
         }
@@ -599,7 +590,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
         @Override
         public void call(Object... args) {
 
-                    //Log.e(TAG, "Error connecting");
+            //Log.e(TAG, "Error connecting");
                     /*Toast.makeText(getApplicationContext(),
                             "Unable to connect server!", Toast.LENGTH_LONG).show();*/
         }
@@ -611,25 +602,25 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                     /*JSONObject data = (JSONObject) args[0];
                     String username;
                     String message;*/
-                    try {
-                        JSONObject data = ((JSONObject) args[0]);
-                        if (data.get("evt").equals("regreq")) {
-                            mSocket.emit("regnotify", riderid);
-                        } else if (data.get("evt").equals("registered")) {
+            try {
+                JSONObject data = ((JSONObject) args[0]);
+                if (data.get("evt").equals("regreq")) {
+                    mSocket.emit("regnotify", riderid);
+                } else if (data.get("evt").equals("registered")) {
 
-                        } else if (data.get("evt").equals("data")) {
+                } else if (data.get("evt").equals("data")) {
 
-                            Notify();
-                        }
+                    //Notify();
+                }
 
                        /* username = data.getString("username");
                         message = data.getString("message");*/
-                        Toast.makeText(getApplicationContext(),
-                                args[0].toString(), Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        //Log.e(TAG, e.getMessage());
-                        return;
-                    }
+                Toast.makeText(getApplicationContext(),
+                        args[0].toString(), Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                //Log.e(TAG, e.getMessage());
+                return;
+            }
         }
     };
 
@@ -670,7 +661,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                                 .setVisibility(BIND_IMPORTANT)
                                 .setContentText(olnm)
                                 .setContentIntent(pi)
-                                .setVisibility(VISIBILITY_PUBLIC )
+                                .setVisibility(VISIBILITY_PUBLIC)
                                 .setOngoing(false);
 
                 // CountTimer.start();
@@ -692,10 +683,9 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     }
 
 
-
     public String getDetectedActivity(int detectedActivityType) {
         Resources resources = this.getResources();
-        switch(detectedActivityType) {
+        switch (detectedActivityType) {
             case DetectedActivity.IN_VEHICLE:
                 return resources.getString(R.string.in_vehicle);
             case DetectedActivity.ON_BICYCLE:
@@ -769,7 +759,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     protected void stopLocationUpdates() {

@@ -1,5 +1,6 @@
 package com.goyo.traveltracker.forms;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -8,11 +9,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.google.gson.JsonObject;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.adapters.ProfileAdapter;
 import com.goyo.traveltracker.gloabls.Global;
+import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -25,6 +28,7 @@ public class Profile_Page extends AppCompatActivity {
     CollapsingToolbarLayout collapsing_container;
     FloatingActionButton Fab;
     String data[]=new String[7];
+    ImageView imgToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,7 @@ public class Profile_Page extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.technique_four_toolbar);
         planets_list = (RecyclerView) findViewById(R.id.days_list_4);
         collapsing_container = (CollapsingToolbarLayout) findViewById(R.id.collapsing_container);
+        imgToolbar = (ImageView)findViewById(R.id.imgToolbar);
 
         layout_manager = new LinearLayoutManager(this);
         planets_list.setLayoutManager(layout_manager);
@@ -77,6 +82,12 @@ public class Profile_Page extends AppCompatActivity {
                             data[5]=result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("area").getAsString()+","+result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("city").getAsString();
                             data[6]=result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("state").getAsString()+","+result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("country").getAsString();
                             Names(data);
+                            Ion.with(Profile_Page.this)
+                                    .load(Global.URL + "/images/" + result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("empphoto").getAsString())
+                                    .withBitmap()
+                                    .placeholder(R.drawable.user)
+                                    .error(R.drawable.user)
+                                    .intoImageView(imgToolbar);
                         } catch (Exception ea) {
                             ea.printStackTrace();
                         }
