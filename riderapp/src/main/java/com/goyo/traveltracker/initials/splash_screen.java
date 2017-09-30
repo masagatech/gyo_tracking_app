@@ -38,8 +38,9 @@ public class splash_screen extends AppCompatActivity {
         Global.prgdialog = di();
         try {
             Integer VersionCode = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionCode;
+            String versionName = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionName;
             TextView tvversionCode = (TextView) findViewById(R.id.txtVersionNo);
-            tvversionCode.setText("V : " + VersionCode + "    ");
+            tvversionCode.setText("V : " + versionName + "  Build V :  "+VersionCode);
 
             if (!((Boolean) SHP.get(getApplicationContext(), SHP.ids.shortcut, false))) {
                 addShortcut();

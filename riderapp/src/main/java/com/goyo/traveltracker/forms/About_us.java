@@ -16,6 +16,7 @@ import mehdi.sakout.aboutpage.Element;
 
 public class About_us extends AppCompatActivity {
     Integer VersionCode;
+    String versionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class About_us extends AppCompatActivity {
         adsElement.setTitle("Travel Tracker");
         try {
             VersionCode = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionCode;
+            versionName = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -33,7 +35,7 @@ public class About_us extends AppCompatActivity {
                 .setImage(R.drawable.goyologo)
                 .setDescription("We are Technology Enthusiast having broad range of experience in Vehicles Tracking, rides bookings & deliveries")
                 .addItem(adsElement)
-                .addItem(new Element().setTitle("Version : "+VersionCode))
+                .addItem(new Element().setTitle("Version : "+versionName+"  Build Version : "+VersionCode))
                 .addGroup("Discover what all the buzz is about!")
                 .addEmail("info@goyo.in")
                 .addWebsite("http://goyo.in/")

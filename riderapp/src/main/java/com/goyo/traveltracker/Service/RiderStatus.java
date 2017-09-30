@@ -16,6 +16,7 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -108,6 +109,13 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     private int ActivityPerc=0;
 
 
+    //Wakelock
+    private PowerManager.WakeLock wakeLock;
+    private PowerManager powerManager;
+
+    private boolean isNotifyInTransit = false;
+    private boolean isSendToServerInTransit = false;
+
 //    private ActivityDetectionBroadcastReceiver mBroadcastReceiver;
 
     Integer VersionCode;
@@ -128,9 +136,13 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         hsid = SHP.get(getBaseContext(), SHP.ids.hsid, "0").toString();
         riderid = SHP.get(getBaseContext(), SHP.ids.uid, "0").toString();
         sql = new SQLBase(this);
+
+
+        initCpuAwake();
         SocketClient();
 
 //        mBroadcastReceiver = new ActivityDetectionBroadcastReceiver();
@@ -223,7 +235,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                     //send geo data only if its accurate
 //                    if(!(accuracy<=30.0&&((ActivityRecg.equals("Still")&&ActivityPerc==100)||(ActivityRecg.equals("Tilting")&&ActivityPerc==100))))
 //                    Toast.makeText(context, accuracy+"", Toast.LENGTH_SHORT).show();
-                    if(accuracy<=20&&!(Rider_Lat.equals("0.0"))&&!(Rider_Long.equals("0.0"))){
+                    if(accuracy<=100&&!(Rider_Lat.equals("0.0"))&&!(Rider_Long.equals("0.0"))){
                         sendingLocationToServer();
                     }
                     LocationTimerResseter = 0;
@@ -258,6 +270,12 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 
         return START_STICKY;
 
+    }
+
+    private void initCpuAwake() {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "RiderStatus");
     }
 
 
@@ -310,6 +328,14 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
 
     private void sendingLocationToServer() {
 
+        if (isSendToServerInTransit) return;
+
+        if (Rider_Lat == "0.0") return;
+
+        if (wakeLock != null) wakeLock.acquire(5000);
+
+        isSendToServerInTransit = true;
+
         try {
             VersionCode = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
@@ -354,6 +380,11 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                         } catch (Exception ea) {
                             ea.printStackTrace();
                         }
+
+                        if (wakeLock != null && wakeLock.isHeld()) {
+                            wakeLock.release();
+                        }
+                        isSendToServerInTransit = false;
                     }
                 });
     }
