@@ -24,8 +24,8 @@ android {
         minSdkVersion 15
         targetSdkVersion 25
         compileSdkVersion = 25
-        versionCode 20
-        versionName "1.8"
+        versionCode 22
+        versionName "2.0"
         multiDexEnabled true
     }
 
@@ -95,8 +95,6 @@ dependencies {
         transitive = true;
     }
     //    compile 'com.github.ManuelPeinado:RefreshActionItem:parent-1.0.3'
-
-
 
 
     compile 'com.android.support:multidex:1.0.1'

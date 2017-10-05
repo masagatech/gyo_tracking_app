@@ -28,12 +28,11 @@
         android:textSize="17dp"
         android:textColor="#fff"
         android:text="12:12:12 pm"/>
+
     <ImageView
         android:id="@+id/Trip_Btn"
         android:layout_width="40dp"
         android:layout_height="match_parent"
         android:background="@drawable/arr_trip"/>
-
-
 
 </LinearLayout>

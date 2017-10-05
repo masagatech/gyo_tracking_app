@@ -9,6 +9,8 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 
+import com.goyo.traveltracker.gloabls.Global;
+
 import org.apache.http.ParseException;
 
 import java.text.DateFormat;
@@ -102,6 +104,13 @@ public class common {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
         String  currenttime = sdf.format(dt);
         return currenttime;
+
+    }
+
+    public static String GetUniqueID(String name){
+
+        String id = name+String.valueOf(System.currentTimeMillis())+Global.loginusr.getDriverid()+ Global.loginusr.getEnttid();
+        return id;
 
     }
 

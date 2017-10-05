@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.traveltracker.R;
+import com.goyo.traveltracker.forms.EditStops;
 import com.goyo.traveltracker.forms.OrderStatus;
 import com.goyo.traveltracker.forms.Orientation;
 import com.goyo.traveltracker.forms.PendingOrdersView;
@@ -113,8 +115,34 @@ public class ComplatedOrderAdapter extends RecyclerView.Adapter<pending_order_vi
         holder.mMarchant.setText(timeLineModel.get_title());
         holder.Custmer_name.setText(timeLineModel.get_body());
         holder.mTime.setText(timeLineModel.get_time());
-        holder.mMarchant.setText(timeLineModel.get_title());
         holder.Tags.setTags(TagsArray);
+        holder.mDate.setText("InTime: "+timeLineModel.get_in_time());
+        holder.Remark.setText("OutTime: "+timeLineModel.get_out_time());
+
+        holder.Btn_Delivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent=new Intent(mContext, EditStops.class);
+                intent.putExtra("date",timeLineModel.get_creat_on());
+                intent.putExtra("time",timeLineModel.get_time());
+                intent.putExtra("title",timeLineModel.get_title());
+                intent.putExtra("body",timeLineModel.get_body());
+                intent.putExtra("InTime",timeLineModel.get_in_time());
+                intent.putExtra("OutTime",timeLineModel.get_out_time());
+                intent.putExtra("unique_id",timeLineModel.get_stop_id());
+                intent.putExtra("is_server",timeLineModel.get_is_server_send());
+                intent.putExtra("Exp_id",timeLineModel.get_exp_id());
+                intent.putExtra("Exp_disc",timeLineModel.get_exp_disc());
+                intent.putExtra("Exp_type",timeLineModel.get_exp_type());
+                intent.putExtra("Exp_value",timeLineModel.get_exp_value());
+                intent.putExtra("Tags",timeLineModel.get_tags());
+                intent.putExtra("image paths",timeLineModel.get_image_paths());
+                intent.putExtra("lat",timeLineModel.get_lat());
+                intent.putExtra("lon",timeLineModel.get_lon());
+                mContext.startActivity(intent);
+            }
+        });
 
 
 

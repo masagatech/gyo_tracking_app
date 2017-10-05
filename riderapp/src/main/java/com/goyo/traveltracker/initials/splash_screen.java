@@ -40,7 +40,7 @@ public class splash_screen extends AppCompatActivity {
             Integer VersionCode = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionCode;
             String versionName = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionName;
             TextView tvversionCode = (TextView) findViewById(R.id.txtVersionNo);
-            tvversionCode.setText("V : " + versionName + "  Build V :  "+VersionCode);
+            tvversionCode.setText("V : " + versionName);
 
             if (!((Boolean) SHP.get(getApplicationContext(), SHP.ids.shortcut, false))) {
                 addShortcut();

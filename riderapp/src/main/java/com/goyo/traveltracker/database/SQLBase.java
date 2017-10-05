@@ -342,6 +342,9 @@ public class SQLBase  {
             values.put(Tables.tblofflinetask.EXP_Type, Task.get_exp_type());
             values.put(Tables.tblofflinetask.EXP_Value, Task.get_exp_value());
             values.put(Tables.tblofflinetask.EXP_Disc, Task.get_exp_disc());
+            values.put(Tables.tblofflinetask.IN_TIME, Task.get_in_time());
+            values.put(Tables.tblofflinetask.OUT_TIME, Task.get_out_time());
+            values.put(Tables.tblofflinetask.STOP_ID, Task.get_stop_id());
 
             // Inserting Row
             sqLiteDB.insert(Tables.tblofflinetask.name, null, values);
@@ -409,7 +412,10 @@ public class SQLBase  {
                 + Tables.tblofflinetask.EXP_ID+","
                 + Tables.tblofflinetask.EXP_Type+","
                 + Tables.tblofflinetask.EXP_Value+","
-                + Tables.tblofflinetask.EXP_Disc
+                + Tables.tblofflinetask.EXP_Disc+","
+                + Tables.tblofflinetask.IN_TIME+","
+                + Tables.tblofflinetask.OUT_TIME+","
+                + Tables.tblofflinetask.STOP_ID
                 + " FROM " + Tables.tblofflinetask.name +" WHERE "
                 + Tables.tblofflinetask.Task_Title + " = '" + Tag_Name+ "'";
         Cursor cursor = sqLiteDB.rawQuery(Query, null);
@@ -438,7 +444,10 @@ public class SQLBase  {
                 + Tables.tblofflinetask.EXP_ID+","
                 + Tables.tblofflinetask.EXP_Type+","
                 + Tables.tblofflinetask.EXP_Value+","
-                + Tables.tblofflinetask.EXP_Disc
+                + Tables.tblofflinetask.EXP_Disc+","
+                + Tables.tblofflinetask.IN_TIME+","
+                + Tables.tblofflinetask.OUT_TIME+","
+                + Tables.tblofflinetask.STOP_ID
                 + " FROM " + Tables.tblofflinetask.name +" WHERE "
                 + Tables.tblofflinetask.Is_Server_Send+ " = '1'";
         Cursor cursor = sqLiteDB.rawQuery(selectEvents, null);
@@ -461,6 +470,9 @@ public class SQLBase  {
                 map.put(Tables.tblofflinetask.EXP_Type, cursor.getString(11));
                 map.put(Tables.tblofflinetask.EXP_Value, cursor.getString(12));
                 map.put(Tables.tblofflinetask.EXP_Disc, cursor.getString(13));
+                map.put(Tables.tblofflinetask.IN_TIME, cursor.getString(14));
+                map.put(Tables.tblofflinetask.OUT_TIME, cursor.getString(15));
+                map.put(Tables.tblofflinetask.STOP_ID, cursor.getString(16));
                 data.add(map);
             } while (cursor.moveToNext());
         }
@@ -487,7 +499,10 @@ public class SQLBase  {
                 + Tables.tblofflinetask.EXP_ID+","
                 + Tables.tblofflinetask.EXP_Type+","
                 + Tables.tblofflinetask.EXP_Value+","
-                + Tables.tblofflinetask.EXP_Disc
+                + Tables.tblofflinetask.EXP_Disc+","
+                + Tables.tblofflinetask.IN_TIME+","
+                + Tables.tblofflinetask.OUT_TIME+","
+                + Tables.tblofflinetask.STOP_ID
                 + " FROM " + Tables.tblofflinetask.name +" WHERE "
                 + Tables.tblofflinetask.Task_Creat_On+ " = '"+date+"'";
         Cursor cursor = sqLiteDB.rawQuery(selectEvents, null);
@@ -510,6 +525,9 @@ public class SQLBase  {
                 map.put(Tables.tblofflinetask.EXP_Type, cursor.getString(11));
                 map.put(Tables.tblofflinetask.EXP_Value, cursor.getString(12));
                 map.put(Tables.tblofflinetask.EXP_Disc, cursor.getString(13));
+                map.put(Tables.tblofflinetask.IN_TIME, cursor.getString(14));
+                map.put(Tables.tblofflinetask.OUT_TIME, cursor.getString(15));
+                map.put(Tables.tblofflinetask.STOP_ID, cursor.getString(16));
                 data.add(map);
             } while (cursor.moveToNext());
         }
@@ -524,6 +542,35 @@ public class SQLBase  {
         sqLiteDB.execSQL("UPDATE " + Tables.tblofflinetask.name + " SET "
                 +  Tables.tblofflinetask.Is_Server_Send + "='" + sendtoserver+ "'"
                 + " WHERE " + Tables.tblofflinetask.Task_Title + " = '" + _taskName+ "'");
+    }
+
+    public void EDIT_STOPS(String get_title, String get_body,String get_lat,String get_lon,String get_tags,String get_date,String get_is_server_send,
+                           String get_time,String get_image_paths,String get_exp_id,String get_exp_type,String get_exp_value,String get_exp_disc,
+                           String get_in_time,String get_out_time,String uneq_id){
+
+        ContentValues values = new ContentValues();
+        values.put(Tables.tblofflinetask.Task_Title,get_title);
+        values.put(Tables.tblofflinetask.Task_Body,get_body);
+        values.put(Tables.tblofflinetask.Task_Lat, get_lat);
+        values.put(Tables.tblofflinetask.Task_Lon, get_lon);
+        values.put(Tables.tblofflinetask.Task_Tags, get_tags);
+        values.put(Tables.tblofflinetask.Task_Creat_On, get_date);
+        values.put(Tables.tblofflinetask.Is_Server_Send, get_is_server_send);
+        values.put(Tables.tblofflinetask.Task_Time, get_time);
+        values.put(Tables.tblofflinetask.Task_Images_Paths, get_image_paths);
+        values.put(Tables.tblofflinetask.EXP_ID, get_exp_id);
+        values.put(Tables.tblofflinetask.EXP_Type, get_exp_type);
+        values.put(Tables.tblofflinetask.EXP_Value, get_exp_value);
+        values.put(Tables.tblofflinetask.EXP_Disc, get_exp_disc);
+        values.put(Tables.tblofflinetask.IN_TIME, get_in_time);
+        values.put(Tables.tblofflinetask.OUT_TIME, get_out_time);
+
+        sqLiteDB.update(Tables.tblofflinetask.name, values, Tables.tblofflinetask.STOP_ID+"= '"+uneq_id+ "'", null);
+
+//        sqLiteDB.insert(Tables.tblofflinetask.name, null, values);
+//        sqLiteDB.execSQL("UPDATE " + Tables.tblofflinetask.name + " SET "
+//                +  Tables.tblofflinetask.Is_Server_Send + "='" + sendtoserver+ "'"
+//                + " WHERE " + Tables.tblofflinetask.Task_Title + " = '" + _taskName+ "'");
     }
 
     public long getProfilesCount() {

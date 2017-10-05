@@ -73,14 +73,36 @@
                             android:text="Expense" />
                     </FrameLayout>
 
-
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_timeline_date"
                         android:layout_width="match_parent"
-                        android:visibility="gone"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        tools:text="24 JAN" />
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textSize="10dp"
+                        android:textColor="@color/green_light"
+                        tools:text="TimeIn: 08:9 AM" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/Remark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textSize="10dp"
+                        android:textColor="@color/red_light"
+                        tools:text="TimeOut: 08:9 PM" />
+
+                        <Button
+                            android:id="@+id/Btn_Delivery"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                           android:background="@drawable/edit" />
+                        </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -280,17 +302,7 @@
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp" />
 
-                            <Button
-                                android:visibility="gone"
-                                android:id="@+id/Btn_Delivery"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
-                                android:layout_marginRight="15dp"
-                                android:layout_weight="1"
-                                android:background="@android:color/holo_green_dark"
-                                android:text="@string/msg_delivered"
-                                android:textColor="@color/cardview_light_background" />
+
 
                             <Button
                                 android:visibility="gone"
@@ -328,16 +340,7 @@
                                     app:hint="  Enter Tags" />
                             </LinearLayout>
 
-                            <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/Remark"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="31dp"
-                                android:layout_marginLeft="31dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:textColor="@android:color/black"
-                                tools:text="Remark :hsdgddhdddgddgdgdgdgdgdgdgdgdg" />
+
 
                             <ImageButton
                                 android:layout_width="wrap_content"

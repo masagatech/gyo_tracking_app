@@ -4,6 +4,7 @@ package com.goyo.traveltracker.forms;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.allattentionhere.fabulousfilter.AAH_FabulousFragment;
@@ -34,6 +36,7 @@ import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.model.model_tag_db;
 import com.goyo.traveltracker.model.model_task;
+import com.goyo.traveltracker.utils.common;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.pchmn.materialchips.ChipsInput;
@@ -74,35 +77,36 @@ import static com.goyo.traveltracker.gloabls.Global.urls.mobileupload;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewStops extends AAH_FabulousFragment{
+public class NewStops extends AAH_FabulousFragment {
 
     private ImageView map;
-    private EditText remark,remark_title;
+    private EditText remark, remark_title, InTime, OutTime;
     private LocationManager locationManager2;
     public Criteria criteria;
-    private  Location location;
-    public String bestProvider, currentDateTimeString,Empl_Id;
-    String Body,Title,Lat,Lon,time;
+    private Location location;
+    public String bestProvider, currentDateTimeString, Empl_Id,_intime,_outtime,_stop_id;
+    String Body, Title, Lat, Lon, time;
+     Calendar In_time,Out_ime;
     private static final int REQUEST_CODE_PICKER = 20;
     private static final int RC_CAMERA = 3000;
     private Button Btn_Add_Task;
     private ImageView Count_Expense;
     private TextView Count_Image;
-    private FrameLayout ChooseImage,Expense;
+    private FrameLayout ChooseImage, Expense;
     private static final String IMAGE_DIRECTORY = "/demonuts";
     private ChipsInput chipsInput;
-    ArrayList<String> Image=new ArrayList<>();
-    private String [] arrFilePaths=new String[4];
+    ArrayList<String> Image = new ArrayList<>();
+    private String[] arrFilePaths = new String[4];
     ArrayList<File> CompressedImage = new ArrayList<>();
-        List<String> Exp;
+    List<String> Exp;
     List<String> Exp_Id;
     private Spinner Expense_Type;
-    String Selected_Exp,Selected_Value,Selected_Disc,Selected_EXP_Type;
+    String Selected_Exp, Selected_Value, Selected_Disc, Selected_EXP_Type;
     private ProgressDialog loader;
     private ImageView Reminder;
 
 
-    public static  NewStops newInstance() {
+    public static NewStops newInstance() {
         NewStops f = new NewStops();
         return f;
         // Required empty public constructor
@@ -120,10 +124,10 @@ public class NewStops extends AAH_FabulousFragment{
         SQLBase db = new SQLBase(getActivity());
 
         List<model_tag_db> data = new ArrayList<model_tag_db>();
-        List<HashMap<String,String>> d = db.Get_Tags();
-        if(d.size()>0) {
+        List<HashMap<String, String>> d = db.Get_Tags();
+        if (d.size() > 0) {
             for (int i = 0; i <= d.size() - 1; i++) {
-                data.add(new model_tag_db( d.get(i).get(Tables.tbltags.Tag_Id), d.get(i).get(Tables.tbltags.Tag_Title),d.get(i).get(Tables.tbltags.Tag_remark_1),d.get(i).get(Tables.tbltags.Tag_remark_2),d.get(i).get(Tables.tbltags.Tag_remark_3),d.get(i).get(Tables.tbltags.Tag_Creat_On),d.get(i).get(Tables.tbltags.Is_Server_Send)));
+                data.add(new model_tag_db(d.get(i).get(Tables.tbltags.Tag_Id), d.get(i).get(Tables.tbltags.Tag_Title), d.get(i).get(Tables.tbltags.Tag_remark_1), d.get(i).get(Tables.tbltags.Tag_remark_2), d.get(i).get(Tables.tbltags.Tag_remark_3), d.get(i).get(Tables.tbltags.Tag_Creat_On), d.get(i).get(Tables.tbltags.Is_Server_Send)));
             }
         }
 
@@ -151,16 +155,65 @@ public class NewStops extends AAH_FabulousFragment{
 //        }, 2000);
 
 
-        Reminder=(ImageView) contentView.findViewById(R.id.reminder) ;
+
+        Reminder = (ImageView) contentView.findViewById(R.id.reminder);
         remark = (EditText) contentView.findViewById(R.id.Task_Body);
         remark_title = (EditText) contentView.findViewById(R.id.Task_Title);
 
         //image and expense
+        ChooseImage = (FrameLayout) contentView.findViewById(R.id.ChooseImage);
+        Expense = (FrameLayout) contentView.findViewById(R.id.Expense);
+        Count_Expense = (ImageView) contentView.findViewById(R.id.Count_Expense);
+        Count_Image = (TextView) contentView.findViewById(R.id.Count_Image);
+        InTime = (EditText) contentView.findViewById(R.id.inTime);
+        OutTime = (EditText) contentView.findViewById(R.id.outTime);
 
-        ChooseImage=(FrameLayout) contentView.findViewById(R.id.ChooseImage);
-        Expense=(FrameLayout) contentView.findViewById(R.id.Expense);
-        Count_Expense=(ImageView) contentView.findViewById(R.id.Count_Expense);
-        Count_Image=(TextView) contentView.findViewById(R.id.Count_Image);
+
+        DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+       String times = dateFormat.format(new Date()).toString();
+        InTime.setText(times);
+        OutTime.setText(times);
+
+        InTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                In_time = Calendar.getInstance();
+                int hour = In_time.get(Calendar.HOUR);
+                int minute = In_time.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        boolean isPM = (selectedHour >= 12);
+                        InTime.setText(String.format("%02d:%02d %s", (selectedHour == 12 || selectedHour == 0) ? 12 : selectedHour % 12, selectedMinute, isPM ? "PM" : "AM"));
+//                        InTime.setText(selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, false);//Yes 24 hour time
+                mTimePicker.setTitle("Select InTime");
+                mTimePicker.show();
+
+            }
+        });
+
+        OutTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 Out_ime = Calendar.getInstance();
+                int hour = Out_ime.get(Calendar.HOUR);
+                int minute = Out_ime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        boolean isPM = (selectedHour >= 12);
+                        OutTime.setText(String.format("%02d:%02d %s", (selectedHour == 12 || selectedHour == 0) ? 12 : selectedHour % 12, selectedMinute, isPM ? "PM" : "AM"));
+//                        OutTime.setText(selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, false);//Yes 24 hour time
+                mTimePicker.setTitle("Select OutTime");
+                mTimePicker.show();
+            }
+        });
 
         ChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,14 +245,13 @@ public class NewStops extends AAH_FabulousFragment{
             public void onClick(View v) {
 //                if(!IsConnected){
 
-
-
                 currentDateTimeString = DateFormat.getDateInstance().format(new Date());
-                Empl_Id= String.valueOf(Global.loginusr.getDriverid());
-                Title=remark_title.getText().toString();
-                Body=remark.getText().toString();
-                Lat=String.valueOf(Rider_Lat);
-                Lon=String.valueOf(Rider_Long);
+                Empl_Id = String.valueOf(Global.loginusr.getDriverid());
+                Title = remark_title.getText().toString();
+                Body = remark.getText().toString();
+                Lat = String.valueOf(Rider_Lat);
+                Lon = String.valueOf(Rider_Long);
+
 
                 //time
                 DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
@@ -209,19 +261,24 @@ public class NewStops extends AAH_FabulousFragment{
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                 String formattedDate = df.format(c.getTime());
-                String TimenDate=formattedDate+", "+time;
+                String TimenDate = formattedDate + ", " + time;
+
+                _intime=formattedDate+" "+InTime.getText().toString();
+                _outtime=formattedDate+" "+OutTime.getText().toString();
+
+                _stop_id= common.GetUniqueID("s");
 
 
-                if(Title.equals("")){
+                if (Title.equals("")) {
                     Toast.makeText(getActivity(), "Please Enter Info!", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
 
-                    String zipPath = getActivity().getApplicationInfo().dataDir+"/"+Global.loginusr.getEnttid()+"_"+Empl_Id+"_"+Title+"_"+TimenDate+".zip";
+                    String zipPath = getActivity().getApplicationInfo().dataDir + "/" + Global.loginusr.getEnttid() + "_" + Empl_Id + "_" + Title + "_" + TimenDate + ".zip";
 
                     //getting selected tags
                     List<model_tag_db> contactsSelected = (List<model_tag_db>) chipsInput.getSelectedChipList();
                     List<String> Tags = new ArrayList<String>();
-                    if(contactsSelected.size()>0) {
+                    if (contactsSelected.size() > 0) {
                         for (int i = 0; i <= contactsSelected.size() - 1; i++) {
                             Tags.add(contactsSelected.get(i).getLabel());
                         }
@@ -233,22 +290,19 @@ public class NewStops extends AAH_FabulousFragment{
                     if (!db2.ISTASK_ALREDY_EXIST(Title)) {
 
 
-
-                        if(arrFilePaths[0]==null){
-                            zipPath = getActivity().getApplicationInfo().dataDir+"/default_image.PNG";
+                        if (arrFilePaths[0] == null) {
+                            zipPath = getActivity().getApplicationInfo().dataDir + "/default_image.PNG";
                             //sending info
-                            SendToServer(Empl_Id, Title, Body, Lat, Lon, TimenDate, Tags,zipPath);
-                        }else {
+                            SendToServer(Empl_Id, Title, Body, Lat, Lon, TimenDate, Tags, zipPath,_intime,_outtime,_stop_id);
+                        } else {
                             loader = new ProgressDialog(getActivity());
                             loader.setCancelable(false);
                             loader.setMessage("Uploading..");
                             loader.show();
-                            //creatin zip file of all selected images
-                            zip(arrFilePaths,zipPath);
-
+                            //creating zip file of all selected images
+                            zip(arrFilePaths, zipPath);
                             //sending info
-                            SendToServer(Empl_Id, Title, Body, Lat, Lon, TimenDate, Tags,zipPath);
-
+                            SendToServer(Empl_Id, Title, Body, Lat, Lon, TimenDate, Tags, zipPath,_intime,_outtime,_stop_id);
                         }
 
                     }
@@ -256,24 +310,23 @@ public class NewStops extends AAH_FabulousFragment{
                     //save to db
 
 
-
                     SQLBase db = new SQLBase(getActivity());
                     Gson gson = new Gson();
-                    String TagString= gson.toJson(Tags);
+                    String TagString = gson.toJson(Tags);
 
                     //checking if there is internet
-                    if(IsMobailConnected){
+                    if (IsMobailConnected) {
                         if (!db.ISTASK_ALREDY_EXIST(Title)) {
-                            db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,formattedDate,"0",time,zipPath,Selected_Exp,Selected_EXP_Type,Selected_Value,Selected_Disc));
-                        }else {
+                            db.OFFLINE_TASK_ADDTASK(new model_task(Title, Body, Lat, Lon, TagString, formattedDate, "0", time, zipPath, Selected_Exp, Selected_EXP_Type, Selected_Value, Selected_Disc,InTime.getText().toString(),OutTime.getText().toString(),_stop_id));
+                        } else {
                             Toast.makeText(getActivity(), "This Stops Already Exist!", Toast.LENGTH_SHORT).show();
                         }
-                    }else {
+                    } else {
                         if (!db.ISTASK_ALREDY_EXIST(Title)) {
-                            db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,formattedDate,"1",time,zipPath,Selected_Exp,Selected_EXP_Type,Selected_Value,Selected_Disc));
+                            db.OFFLINE_TASK_ADDTASK(new model_task(Title, Body, Lat, Lon, TagString, formattedDate, "1", time, zipPath, Selected_Exp, Selected_EXP_Type, Selected_Value, Selected_Disc,InTime.getText().toString(),OutTime.getText().toString(),_stop_id));
                             closeFilter("closed");
                             Toast.makeText(getActivity(), "Saved successfully", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             Toast.makeText(getActivity(), "This Stops Already Exist!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -347,10 +400,10 @@ public class NewStops extends AAH_FabulousFragment{
             public void onClick(DialogInterface dialog, int which) {
 
                 int Pos = Expense_Type.getSelectedItemPosition();
-                if(Exp_Id.size()>0) {
+                if (Exp_Id.size() > 0) {
                     Selected_Exp = Exp_Id.get(Pos);
                 }
-                Selected_EXP_Type=Expense_Type.getSelectedItem().toString();
+                Selected_EXP_Type = Expense_Type.getSelectedItem().toString();
                 Selected_Value = Expense_Value.getText().toString();
                 Selected_Disc = Expense_Disc.getText().toString();
 
@@ -363,14 +416,14 @@ public class NewStops extends AAH_FabulousFragment{
     }
 
 
-    private void GetfromDb(){
+    private void GetfromDb() {
         //getting expense name from db and setting in spinner
         SQLBase db = new SQLBase(getActivity());
 
         Exp = new ArrayList<String>();
         Exp_Id = new ArrayList<String>();
-        List<HashMap<String,String>> d = db.Get_Expenses_Display();
-        if(d.size()>0) {
+        List<HashMap<String, String>> d = db.Get_Expenses_Display();
+        if (d.size() > 0) {
             for (int i = 0; i <= d.size() - 1; i++) {
                 Exp.add(d.get(i).get(Tables.tblexpense.Expense_Name));
                 Exp_Id.add(d.get(i).get(Tables.tblexpense.Exp_ID));
@@ -390,46 +443,49 @@ public class NewStops extends AAH_FabulousFragment{
     }
 
 
+    private void SendToServer(String Empl_Id, String Title, String Body, String Lat, String Lon, String currentDateTimeString, List<String> Tags, String ZipFile,String In_time,String Out_time,String _stop_id) {
 
-    private void SendToServer(String Empl_Id, String Title, String Body, String Lat, String Lon, String currentDateTimeString, List<String> Tags,String ZipFile){
+        String tag = Joiner.on(",").join(Tags);
 
-        String tag= Joiner.on(",").join(Tags);
-
-            Ion.with(getActivity())
-            .load(mobileupload.value)
-            .setMultipartParameter("enttid", Global.loginusr.getEnttid()+"")
-            .setMultipartParameter("uid", Empl_Id)
-            .setMultipartParameter("stpnm", Title)
-            .setMultipartParameter("stpdesc", Body)
-            .setMultipartParameter("lat", Lat)
-            .setMultipartParameter("lng", Lon)
-            .setMultipartParameter("trpid", TripId)
-            .setMultipartParameter("cuid",Global.loginusr.getUcode()+"" )
-            .setMultipartParameter("mob_createdon", currentDateTimeString)
-            .setMultipartParameter("tag","{" + tag + "}")
-            .setMultipartParameter("path","")
-            .setMultipartParameter("expid", Selected_Exp)
-            .setMultipartParameter("expval", Selected_Value)
-            .setMultipartParameter("expdesc", Selected_Disc)
-            .setMultipartFile("uploadimg", new File(ZipFile))
-            .asJsonObject()
-            .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            // do stuff with the result or error
-                            try {
-                                Toast.makeText(getActivity(),"Success!", Toast.LENGTH_SHORT).show();
-                                closeFilter("closed");
+        Ion.with(getActivity())
+                .load(mobileupload.value)
+                .setMultipartParameter("enttid", Global.loginusr.getEnttid() + "")
+                .setMultipartParameter("uid", Empl_Id)
+                .setMultipartParameter("stpnm", Title)
+                .setMultipartParameter("stpdesc", Body)
+                .setMultipartParameter("intime", In_time)
+                .setMultipartParameter("outtime", Out_time)
+                .setMultipartParameter("lat", Lat)
+                .setMultipartParameter("lng", Lon)
+                .setMultipartParameter("trpid", TripId)
+                .setMultipartParameter("cuid", Global.loginusr.getUcode() + "")
+                .setMultipartParameter("mob_createdon", currentDateTimeString)
+                .setMultipartParameter("tag", tag.replace('[','{').replace(']','}'))
+                .setMultipartParameter("path", "")
+                .setMultipartParameter("expid", Selected_Exp)
+                .setMultipartParameter("expval", Selected_Value)
+                .setMultipartParameter("mobstpid", _stop_id)
+                .setMultipartParameter("stpid", "0")
+                .setMultipartParameter("expdesc", Selected_Disc)
+                .setMultipartFile("uploadimg", new File(ZipFile))
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        // do stuff with the result or error
+                        try {
+                            Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
+                            closeFilter("closed");
 //                                ((dashboard)getActivity()).refreshMyData();
-                            } catch (Exception ea) {
-                                ea.printStackTrace();
-                            }
-                            if(loader!=null) {
-                                loader.hide();
-                            }
-
+                        } catch (Exception ea) {
+                            ea.printStackTrace();
                         }
-                    });
+                        if (loader != null) {
+                            loader.hide();
+                        }
+
+                    }
+                });
     }
 
 
@@ -478,8 +534,8 @@ public class NewStops extends AAH_FabulousFragment{
                     dest));
             byte data[] = new byte[BUFFER];
 
-            for (int i = 0; i < _files.length -1; i++) {
-                if(_files[i] == null)break;
+            for (int i = 0; i < _files.length - 1; i++) {
+                if (_files[i] == null) break;
                 FileInputStream fi = new FileInputStream(_files[i]);
                 origin = new BufferedInputStream(fi, BUFFER);
 
@@ -500,7 +556,6 @@ public class NewStops extends AAH_FabulousFragment{
     }
 
 
-
     private class MyPickListener implements Picker.PickListener {
 
         @Override
@@ -516,7 +571,7 @@ public class NewStops extends AAH_FabulousFragment{
 
 
             //compress selected image
-            Luban.compress(getActivity(),CompressedImage)
+            Luban.compress(getActivity(), CompressedImage)
                     .putGear(Luban.CUSTOM_GEAR)
                     .asListObservable()
                     .subscribe(new Consumer<List<File>>() {
@@ -524,7 +579,7 @@ public class NewStops extends AAH_FabulousFragment{
                         public void accept(List<File> files) throws Exception {
                             int size = files.size();
                             while (size-- > 0) {
-                                arrFilePaths[size]=files.get(size).toString();
+                                arrFilePaths[size] = files.get(size).toString();
                             }
                             loader.hide();
                         }
@@ -535,11 +590,11 @@ public class NewStops extends AAH_FabulousFragment{
                         }
                     });
 
-            int count =CompressedImage.size();
+            int count = CompressedImage.size();
             //showing custem image icon
-            if(count>0){
-              Count_Image.setVisibility(View.VISIBLE);
-              Count_Image.setText(count+"");
+            if (count > 0) {
+                Count_Image.setVisibility(View.VISIBLE);
+                Count_Image.setText(count + "");
             }
 
 
@@ -555,16 +610,16 @@ public class NewStops extends AAH_FabulousFragment{
     }
 
 
-    private void pickImages(){
+    private void pickImages() {
         //You can change many settings in builder like limit , Pick mode and colors
-        new Picker.Builder(getActivity(),new MyPickListener(),R.style.MIP_theme)
+        new Picker.Builder(getActivity(), new MyPickListener(), R.style.MIP_theme)
                 .setPickMode(Picker.PickMode.MULTIPLE_IMAGES)
                 .setLimit(4)
                 .build()
                 .startActivity();
     }
 
-    private void setMap(){
+    private void setMap() {
         final String STATIC_MAP_API_ENDPOINT = "http://maps.google.com/maps/api/staticmap?center=" + Rider_Lat + "," + Rider_Long + "&zoom=13&size=640x400&markers=color:red%7C" + Rider_Lat + "," + Rider_Long;
 
         AsyncTask<Void, Void, Bitmap> setImageFromUrl = new AsyncTask<Void, Void, Bitmap>() {

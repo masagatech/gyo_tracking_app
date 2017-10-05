@@ -22,8 +22,8 @@ public class Global {
     public final static String REST_URL = URL + "/goyoapi";
     public static final String SOCKET_URL = "http://traveltrack.goyo.in:8080/";
 
-//    public final static String REST_URL = "http://192.168.1.100:8092/goyoapi";
-//    public static final String SOCKET_URL = "http://192.168.1.100:8091/";
+//    public final static String REST_URL = "http://192.168.1.101:8092/goyoapi";
+//    public static final String SOCKET_URL = "http://192.168.1.101:8091/";
 
 //    public final static String REST_URL = "http://192.168.43.10:8092/goyoapi";
 //    public static final String SOCKET_URL = "http://192.168.43.10:8083/";

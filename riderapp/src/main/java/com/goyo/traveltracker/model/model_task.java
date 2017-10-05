@@ -21,9 +21,36 @@ public class model_task {
     String _exp_id;
     String _exp_value;
     String _exp_disc;
+    String _in_time;
+    String _out_time;
+    String _stop_id;
+
+    public String get_stop_id() {
+        return _stop_id;
+    }
+
+    public void set_stop_id(String _stop_id) {
+        this._stop_id = _stop_id;
+    }
 
     public String get_exp_type() {
         return _exp_type;
+    }
+
+    public String get_in_time() {
+        return _in_time;
+    }
+
+    public void set_in_time(String _in_time) {
+        this._in_time = _in_time;
+    }
+
+    public String get_out_time() {
+        return _out_time;
+    }
+
+    public void set_out_time(String _out_time) {
+        this._out_time = _out_time;
     }
 
     public void set_exp_type(String _exp_type) {
@@ -138,7 +165,7 @@ public class model_task {
 
 
     // constructor
-    public model_task(String _title, String _body, String _lat,String _lon,String tags,String _creat_on,String _is_server_send,String _time_, String _image_paths_,String _exp_id,String _exp_type,String _exp_value,String _exp_disc){
+    public model_task(String _title, String _body, String _lat,String _lon,String tags,String _creat_on,String _is_server_send,String _time_, String _image_paths_,String _exp_id,String _exp_type,String _exp_value,String _exp_disc,String in_time,String out_time,String stop_id){
         this._title = _title;
         this._body = _body;
         this._lat = _lat;
@@ -152,6 +179,9 @@ public class model_task {
         this._exp_type = _exp_type;
         this._exp_value = _exp_value;
         this._exp_disc = _exp_disc;
+        this._in_time = in_time;
+        this._out_time = out_time;
+        this._stop_id = stop_id;
     }
 
     public OrderStatus status = OrderStatus.ACTIVE;

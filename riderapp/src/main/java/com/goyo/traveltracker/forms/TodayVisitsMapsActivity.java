@@ -1,6 +1,7 @@
 package com.goyo.traveltracker.forms;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -72,6 +74,9 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
     private ListView lst_trip_list;
     private String TripId = "0";
     Polyline polylineFinal;
+    Marker Firstmarker,SecondMarker;
+
+    private ProgressDialog loader;
 
     //drag panel
     private SlidingUpPanelLayout mLayout;
@@ -151,13 +156,23 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
         lst_trip_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                loader = new ProgressDialog(TodayVisitsMapsActivity.this);
+                loader.setCancelable(false);
+                loader.setMessage(TodayVisitsMapsActivity.this.getString(R.string.wait_msg));
+                loader.show();
+
                 if(polylineFinal!=null){
                     polylineFinal.remove();
+                }
+                if(Firstmarker!=null||SecondMarker!=null){
+                    Firstmarker.remove();
+                    SecondMarker.remove();
                 }
                 model_trip_map model_trip_map=lsttrip.get(position);
                 TripId=model_trip_map.trpid;
                 GetPathOnly(TripId);
                 mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+
             }
         });
 
@@ -246,6 +261,7 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
                             }
 
                             DrawinMap(MapLoc);
+                            loader.hide();
 
                         } catch (Exception ea) {
                             ea.printStackTrace();
@@ -272,14 +288,14 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
             polylineFinal = mMap.addPolyline (lineOptions);
 
             //Starting and End markers
-            mMap.addMarker(new MarkerOptions()
+            Firstmarker  = mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                     .position(Map.get(0))
                     .title("End Point")
 //                    .snippet("")
                     .flat(true));
 
-            mMap.addMarker(new MarkerOptions()
+            SecondMarker =    mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                     .position(Map.get(Map.size()-1))
                     .title("Start Point")

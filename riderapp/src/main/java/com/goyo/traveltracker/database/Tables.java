@@ -75,6 +75,9 @@ public final class Tables {
         public static final String EXP_ID= "exp_id";
         public static final String EXP_Value= "exp_value";
         public static final String EXP_Disc= "exp_disc";
+        public static final String IN_TIME= "IN_TIME";
+        public static final String OUT_TIME= "OUT_TIME";
+        public static final String STOP_ID= "STOP_ID";
 
     }
 

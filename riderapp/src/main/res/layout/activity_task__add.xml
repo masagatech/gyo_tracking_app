@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.allattentionhere.fabulousfilter.AAH_FilterView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.allattentionhere.fabulousfilter.AAH_FilterView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:float="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    tools:context="com.goyo.traveltracker.forms.NewStops"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.goyo.traveltracker.forms.NewStops">
     <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-        <!--xmlns:float="http://schemas.android.com/apk/res-auto"-->
-        <!--xmlns:tools="http://schemas.android.com/tools"-->
-        <!--android:background="@color/white"-->
-        <!--tools:context="com.goyo.traveltracker.forms.Task_Add">-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:float="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:background="@color/white"-->
+    <!--tools:context="com.goyo.traveltracker.forms.Task_Add">-->
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -37,231 +36,293 @@
             android:layout_marginTop="5dp"
             float:fletPaddingBottom="10dp"
             float:fletTextAppearance="@style/floatlabelededittext2">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_cash_collection"
-            android:hint="Title"
-            android:id="@+id/Task_Title"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/Task_Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_cash_collection"
+                android:hint="Title"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true" />
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:id="@+id/remark_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/remark_head"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"
-            android:layout_below="@+id/remark_head"
             float:fletPaddingBottom="10dp"
             float:fletTextAppearance="@style/floatlabelededittext2">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@drawable/border_cash_collection"
-            android:gravity="top"
-            android:id="@+id/Task_Body"
-            android:hint="Tell more about it."
-            android:singleLine="true"
-            android:imeOptions="actionDone"
-            android:lines="10"
-            android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/Task_Body"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/border_cash_collection"
+                android:gravity="top"
+                android:hint="Tell more about it."
+                android:imeOptions="actionDone"
+                android:lines="10"
+                android:padding="10dp"
+                android:singleLine="true" />
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
         <LinearLayout
 
+            android:id="@+id/cover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/remark_form"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
-            android:id="@+id/cover"
-            android:background="@drawable/border_cash_collection"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/remark_form"
-            android:layout_height="wrap_content">
-        <com.pchmn.materialchips.ChipsInput
-            android:layout_margin="4dp"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/remark_form"
-            android:layout_height="wrap_content"
-            android:id="@+id/chip"
-            app:deletable="true"
-            app:hint="  Select Tags" />
+            android:background="@drawable/border_cash_collection">
+
+            <com.pchmn.materialchips.ChipsInput
+                android:id="@+id/chip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/remark_form"
+                android:layout_margin="4dp"
+                app:deletable="true"
+                app:hint="  Select Tags" />
         </LinearLayout>
         <!--<com.pchmn.materialchips.ChipView-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_below="@+id/remark_form"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/chip"-->
-            <!--app:label="Chip 6"-->
-            <!--app:labelColor="@android:color/white"-->
-            <!--app:avatarIcon="@drawable/avatar"-->
-            <!--app:backgroundColor="@android:color/holo_blue_light"-->
-            <!--app:deletable="true"-->
-            <!--app:deleteIconColor="@android:color/white" />-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_below="@+id/remark_form"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/chip"-->
+        <!--app:label="Chip 6"-->
+        <!--app:labelColor="@android:color/white"-->
+        <!--app:avatarIcon="@drawable/avatar"-->
+        <!--app:backgroundColor="@android:color/holo_blue_light"-->
+        <!--app:deletable="true"-->
+        <!--app:deleteIconColor="@android:color/white" />-->
 
         <!--<com.goyo.traveltracker.forms.KMPAutoComplTextView-->
-            <!--android:id="@+id/tvAutoCompl"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:layout_below="@+id/remark_form"-->
-            <!--android:completionThreshold="1"-->
-            <!--app:completionHighlightColor="@color/colorAccent"-->
-            <!--app:completionTextColor="#80000000"-->
-            <!--app:completionTextSize="18sp"-->
-            <!--app:completionIgnoreCase="true"/>-->
+        <!--android:id="@+id/tvAutoCompl"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_below="@+id/remark_form"-->
+        <!--android:completionThreshold="1"-->
+        <!--app:completionHighlightColor="@color/colorAccent"-->
+        <!--app:completionTextColor="#80000000"-->
+        <!--app:completionTextSize="18sp"-->
+        <!--app:completionIgnoreCase="true"/>-->
         <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="200dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_below="@+id/cover"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--&gt;-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_below="@+id/cover"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--&gt;-->
 
-            <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--xmlns:map="http://schemas.android.com/apk/res-auto"-->
-            <!--xmlns:tools="http://schemas.android.com/tools"-->
-            <!--android:id="@+id/map"-->
-            <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_width="match_parent"-->
-            <!--tools:context=".MapsActivity"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_alignParentBottom="true"/>-->
+        <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:map="http://schemas.android.com/apk/res-auto"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--android:id="@+id/map"-->
+        <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_width="match_parent"-->
+        <!--tools:context=".MapsActivity"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_alignParentBottom="true"/>-->
 
         <!--</RelativeLayout>-->
 
-
-<LinearLayout
-    android:layout_weight="1"
-    android:id="@+id/layout"
-    android:orientation="horizontal"
-    android:layout_below="@id/cover"
-    android:layout_width="match_parent"
-    android:layout_height="120dp">
-    <FrameLayout
-        android:id="@+id/ChooseImage"
-        android:layout_margin="10dp"
-          android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="45dp">
-        <ImageView
-             android:src="@drawable/att_img"
-            android:id="@+id/imag"
-           android:layout_weight="1"
-            android:scaleType="fitCenter"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:visibility="gone"
-            android:layout_gravity="right"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="52dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/dash_count"
-            android:gravity="center"
-            android:text="0"
-            android:id="@+id/Count_Image"
-            android:textColor="@color/white" />
-    </FrameLayout>
-    <FrameLayout
-        android:id="@+id/Expense"
-        android:layout_margin="10dp"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="45dp">
-        <ImageView
-            android:src="@drawable/expense"
-            android:id="@+id/imageView2"
-            android:scaleType="fitCenter"
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:paddingLeft="10dp"
+                android:text="Select InTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:id="@+id/inTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+
+                android:background="@drawable/border_cash_collection"
+                android:gravity="center"
+                />
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="Select OutTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            <EditText
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:id="@+id/outTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/border_cash_collection"
+                android:gravity="center" />
+                </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="120dp"
+            android:layout_below="@id/cover"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/ChooseImage"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/imag"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/att_img" />
+
+                <TextView
+                    android:id="@+id/Count_Image"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="52dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/dash_count"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/Expense"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/expense" />
+
+                <ImageView
+                    android:id="@+id/Count_Expense"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="54dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/dash_count"
+                    android:gravity="center"
+                    android:src="@drawable/ic_done"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+        </LinearLayout>
 
         <ImageView
-            android:visibility="gone"
-            android:layout_gravity="right"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="54dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/dash_count"
-            android:gravity="center"
-            android:src="@drawable/ic_done"
-            android:text="0"
-            android:id="@+id/Count_Expense"
-            android:textColor="@color/white" />
-    </FrameLayout>
-
-</LinearLayout>
-        <ImageView
-        android:visibility="invisible"
-        android:layout_weight="1"
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@+id/layout"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/map_loading"
-        android:fontFamily="sans-serif-light" />
-    <!--<FrameLayout-->
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/layout"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-light"
+            android:src="@drawable/map_loading"
+            android:visibility="invisible" />
+        <!--<FrameLayout-->
         <!--android:layout_margin="5dp"-->
         <!--android:layout_weight="1"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="match_parent">-->
         <!--<ImageView-->
-            <!--android:id="@+id/imageView3"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_above="@+id/txImageSelects"-->
-            <!--android:background="@drawable/image_selector"-->
-            <!--android:contentDescription="@string/app_name"-->
-            <!--android:scaleType="centerCrop"-->
-            <!--android:textColor="@color/colorPrimary" />-->
+        <!--android:id="@+id/imageView3"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_above="@+id/txImageSelects"-->
+        <!--android:background="@drawable/image_selector"-->
+        <!--android:contentDescription="@string/app_name"-->
+        <!--android:scaleType="centerCrop"-->
+        <!--android:textColor="@color/colorPrimary" />-->
 
         <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:gravity="center"-->
-            <!--android:text="Choose Image!" />-->
-    <!--</FrameLayout>-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:text="Choose Image!" />-->
+        <!--</FrameLayout>-->
 
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <Button
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-light"
-            android:id="@+id/send_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/green_light"
-            android:text="Add Stops"
-            android:textColor="@color/white"
-            android:textSize="17dp" />
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/reminder"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="20dp"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:background="@color/blue_light"
-            android:src="@drawable/reminder"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/send_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:background="@color/green_light"
+                android:fontFamily="sans-serif-light"
+                android:text="Add Stops"
+                android:textColor="@color/white"
+                android:textSize="17dp" />
+
+            <ImageView
+                android:id="@+id/reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/blue_light"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/reminder"
+                android:visibility="gone" />
 
         </LinearLayout>
 

@@ -115,7 +115,10 @@ public final class Procedures {
                 +  Tables.tblofflinetask.EXP_ID + " VARCHAR, "
                 +  Tables.tblofflinetask.EXP_Type+ " VARCHAR, "
                 +  Tables.tblofflinetask.EXP_Value + " VARCHAR, "
-                +  Tables.tblofflinetask.EXP_Disc + " VARCHAR "
+                +  Tables.tblofflinetask.EXP_Disc + " VARCHAR, "
+                +  Tables.tblofflinetask.IN_TIME + " VARCHAR, "
+                +  Tables.tblofflinetask.OUT_TIME + " VARCHAR, "
+                +  Tables.tblofflinetask.STOP_ID + " VARCHAR "
                 +")";
 
 

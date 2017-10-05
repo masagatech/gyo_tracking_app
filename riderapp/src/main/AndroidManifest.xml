@@ -59,12 +59,12 @@
         android:required="false" />
 
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@drawable/goyo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="android.support.multidex.MultiDexApplication">
+        android:theme="@style/AppTheme">
 
         <!--
              Set custom default icon. This is used when no icon is set for incoming notification messages.
@@ -164,7 +164,8 @@
             android:exported="false" />
         <service
             android:name=".Service.RiderStatus"
-            android:exported="false" />
+            android:exported="false"
+            android:stopWithTask="false" />
 
         <!-- [START firebase_service] -->
         <service
@@ -273,18 +274,25 @@
             android:name=".forms.TodayVisitsMapsActivity"
             android:label="@string/title_activity_today_visits_maps"
             android:screenOrientation="portrait" />
-        <activity android:name=".forms.AddTags"
+        <activity
+            android:name=".forms.AddTags"
             android:screenOrientation="portrait" />
-        <activity android:name=".forms.expense"
+        <activity
+            android:name=".forms.expense"
             android:screenOrientation="portrait" />
-        <activity android:name=".forms.AddLeave"
+        <activity
+            android:name=".forms.AddLeave"
             android:screenOrientation="portrait" />
-        <activity android:name=".forms.Holyday"
+        <activity
+            android:name=".forms.Holyday"
             android:screenOrientation="portrait" />
-        <activity android:name=".forms.Leave"
+        <activity
+            android:name=".forms.Leave"
             android:screenOrientation="portrait" />
-        <activity android:name=".forms.Profile_Page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".forms.Profile_Page"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".forms.EditStops"></activity>
     </application>
 
 </manifest>
