@@ -284,7 +284,7 @@ public class rejected_order extends AppCompatActivity {
     private ArrayList<model_expense> SavetoDb(List<model_expense> lst,ArrayList<model_expense> data) {
         SQLBase db = new SQLBase(this);
         if (lst.size() > 0) {
-            for (int i = 0; i <= lst.size() - 1; i++) {
+            for (int i = 0; i < lst.size() - 1; i++) {
                 if(lst.get(i).mob_createdon!=null) {
                     String[] twoStringArray = lst.get(i).mob_createdon.split(", ", 2); //the main line
                     String Date = twoStringArray[0];

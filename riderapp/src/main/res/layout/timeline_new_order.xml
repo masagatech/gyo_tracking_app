@@ -30,7 +30,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp"
-                android:paddingTop="5dp">
+                android:paddingTop="5dp"
+               >
 
                 <ImageView
                     android:layout_width="50px"
@@ -45,13 +46,14 @@
 
                 <TextView
                     android:id="@+id/outlets_new_order"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_weight="1"
+                    android:paddingBottom="4dp"
                     android:textStyle="bold"
                     android:paddingLeft="5dp"
-                    android:text="Pralhad nagar"
+                    android:text="Pralhad nagar fahsagsadashdfaffasd safsahashasdasd asdyysadfdfs"
                     android:textColor="#000" />
 
                 <TextView
@@ -71,7 +73,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingLeft="30dp"
-                android:paddingTop="5dp"
                 android:paddingBottom="5dp">
 
                 <!--<ImageView-->
@@ -91,7 +92,7 @@
                     android:gravity="center_vertical"
                     android:layout_weight="1"
                     android:textStyle="italic"
-                    android:text="5"
+                    android:text="5ggsdfdsgfgsdfgsdfsgdfgsdfgsdfgsdfgsdfgsdfsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgdsfdsfgsdfgsdfdsfdsfdsfdsgfdsgfdsgfsdfgsdfgsdfgsdfgsdfgsdfgdsfg"
                     android:textSize="11dp"
                     android:id="@+id/stops_new_order"
                    />

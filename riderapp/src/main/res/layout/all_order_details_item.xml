@@ -65,6 +65,7 @@
         android:fontFamily="sans-serif-light"
         android:textSize="13dp" />
     <TextView
+        android:visibility="gone"
         android:id="@+id/KMAllOrder"
         android:layout_width="50dp"
         android:layout_height="match_parent"

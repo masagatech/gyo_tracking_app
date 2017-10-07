@@ -184,7 +184,6 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 
                 }
             });
-
             holder.nature_of_work.setEnabled(false);
 
 
@@ -218,7 +217,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
             holder.chipsInput.setFilterableList(data);
         }
 
-        holder.mOrder.setText(timeLineModel.tskid +"");
+        holder.mOrder.setText("Purpose : ");
         holder.mMarchant.setText(timeLineModel.task);
 //        holder.Custmer_name.setText(timeLineModel.custname);
 //        holder.mDeliver_at.setText(timeLineModel.custaddr+"\n");

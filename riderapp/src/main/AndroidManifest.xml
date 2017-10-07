@@ -291,8 +291,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".forms.Profile_Page"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".forms.EditStops"></activity>
+        <activity android:name=".forms.EditStops"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

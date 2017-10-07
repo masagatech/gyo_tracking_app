@@ -57,7 +57,6 @@ public class Holyday extends AppCompatActivity {
         GetHolyDays();
 
         final CaldroidListener listener = new CaldroidListener() {
-
             @Override
             public void onSelectDate(Date date, View view) {
                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
@@ -111,6 +110,7 @@ public class Holyday extends AppCompatActivity {
                                 }
 //                                Dates.addAll(Date);
                             }
+                            caldroidFragment.refreshView();
 //                            SetHolyday(Dates);
 
                         } catch (Exception ea) {
@@ -155,23 +155,7 @@ public class Holyday extends AppCompatActivity {
 
     private void SetHolyday (Date  Dates){
         ColorDrawable red = new ColorDrawable(getResources().getColor(R.color.orange_light));
-//        for(int j = 0; j <= Dates.size() - 1; j++){
-//            try {
-//                DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-//                Date date= df.parse(Dates.get(j));
-//                NewDate.add(date);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
-//        for(int j = 0; j <= Dates.size() - 1; j++){
             caldroidFragment.setBackgroundDrawableForDate(red, Dates);
-//        }
-//
-//        for(int j = 0; j <= Dates.size() - 1; j++){
-//            caldroidFragment.setBackgroundDrawableForDate(red, NewDate.get(j));
-//        }
     }
 
 

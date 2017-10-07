@@ -155,20 +155,20 @@ public class EditStops extends AppCompatActivity {
         InTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                In_time = Calendar.getInstance();
-                int hour = In_time.get(Calendar.HOUR);
-                int minute = In_time.get(Calendar.MINUTE);
-                TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(EditStops.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        boolean isPM = (selectedHour >= 12);
-                        InTime.setText(String.format("%02d:%02d %s", (selectedHour == 12 || selectedHour == 0) ? 12 : selectedHour % 12, selectedMinute, isPM ? "PM" : "AM"));
-//                        InTime.setText(selectedHour + ":" + selectedMinute);
-                    }
-                }, hour, minute, false);//Yes 24 hour time
-                mTimePicker.setTitle("Select InTime");
-                mTimePicker.show();
+//                In_time = Calendar.getInstance();
+//                int hour = In_time.get(Calendar.HOUR);
+//                int minute = In_time.get(Calendar.MINUTE);
+//                TimePickerDialog mTimePicker;
+//                mTimePicker = new TimePickerDialog(EditStops.this, new TimePickerDialog.OnTimeSetListener() {
+//                    @Override
+//                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+//                        boolean isPM = (selectedHour >= 12);
+//                        InTime.setText(String.format("%02d:%02d %s", (selectedHour == 12 || selectedHour == 0) ? 12 : selectedHour % 12, selectedMinute, isPM ? "PM" : "AM"));
+////                        InTime.setText(selectedHour + ":" + selectedMinute);
+//                    }
+//                }, hour, minute, false);//Yes 24 hour time
+//                mTimePicker.setTitle("Select InTime");
+//                mTimePicker.show();
 
             }
         });

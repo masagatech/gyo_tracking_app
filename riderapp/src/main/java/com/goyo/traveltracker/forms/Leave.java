@@ -39,6 +39,9 @@ public class Leave extends AppCompatActivity {
     private  List<Date> Dates;
     private ProgressDialog loader;
     CaldroidFragment caldroidFragment;
+    private ArrayList<String> FromDates;
+    private ArrayList<String> ToDates;
+    private  List<String> DateNames;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,9 @@ public class Leave extends AppCompatActivity {
         t.commit();
 
         SetDates();
+        GetHolyDays();
+
+
 
     }
 
@@ -166,6 +172,7 @@ public class Leave extends AppCompatActivity {
                             ea.printStackTrace();
                         }
                         SetDates();
+                        caldroidFragment.refreshView();
                         loader.hide();
 
 
@@ -186,6 +193,57 @@ public class Leave extends AppCompatActivity {
         }
 
     }
+
+    private void GetHolyDays(){
+        JsonObject json = new JsonObject();
+
+        json.addProperty("empid",Global.loginusr.getDriverid()+"");
+        json.addProperty("flag", "byemp");
+        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+        Ion.with(this)
+                .load(Global.urls.getHoliday.value)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        // do stuff with the result or error
+                        try {
+                            FromDates =new ArrayList<String>();
+                            ToDates =new ArrayList<String>();
+                            DateNames=new ArrayList<String>();
+                            for(int i=0;i<result.get("data").getAsJsonArray().size();i++){
+                                FromDates.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("frmdt").getAsString());
+                                ToDates.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("todt").getAsString());
+                                DateNames.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("hldnm").getAsString());
+                            }
+
+                            for(int i=0;i<result.get("data").getAsJsonArray().size();i++) {
+                                List<Date> Date=getDates(FromDates.get(i),ToDates.get(i));
+                                for (int j=0;j<Date.size();j++) {
+                                    SetHolyday(Date.get(j));
+                                }
+//                                Dates.addAll(Date);
+                            }
+                            caldroidFragment.refreshView();
+//                            SetHolyday(Dates);
+
+                        } catch (Exception ea) {
+                            ea.printStackTrace();
+                        }
+
+
+                    }
+                });
+
+    }
+
+    private void SetHolyday (Date  Dates){
+        ColorDrawable red = new ColorDrawable(getResources().getColor(R.color.orange_light));
+        caldroidFragment.setBackgroundDrawableForDate(red, Dates);
+    }
+
+
 
 
     @Override

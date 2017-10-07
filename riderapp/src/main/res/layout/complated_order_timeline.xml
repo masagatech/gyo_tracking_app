@@ -99,8 +99,8 @@
 
                         <Button
                             android:id="@+id/Btn_Delivery"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                            android:background="@drawable/edit" />
                         </LinearLayout>
 
@@ -171,7 +171,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:drawableLeft="@drawable/pending_deliver_at"
+                            android:drawableLeft="@drawable/order_id"
                             android:textColor="@android:color/black"
                             tools:text="Sector 15, Navi mumbai" />
 

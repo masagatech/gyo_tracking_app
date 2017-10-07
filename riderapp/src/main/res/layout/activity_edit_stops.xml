@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/border_cash_collection"
             android:hint="Title"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionNext"
             android:maxLines="1"
             android:padding="10dp"
             android:singleLine="true" />
@@ -58,18 +58,21 @@
     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
     <LinearLayout
-
         android:id="@+id/cover"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/remark_form"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
         android:layout_marginTop="10dp"
         android:background="@drawable/border_cash_collection">
 
         <com.pchmn.materialchips.ChipsInput
             android:id="@+id/chip"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/remark_form"
@@ -147,7 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-
+                android:clickable="false"
                 android:background="@drawable/border_cash_collection"
                 android:gravity="center"
                 />

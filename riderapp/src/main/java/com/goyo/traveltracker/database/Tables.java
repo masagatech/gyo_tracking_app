@@ -78,6 +78,7 @@ public final class Tables {
         public static final String IN_TIME= "IN_TIME";
         public static final String OUT_TIME= "OUT_TIME";
         public static final String STOP_ID= "STOP_ID";
+        public static final String TEST= "TEST";
 
     }
 

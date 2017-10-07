@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class SQLBase  {
     private static final String DATABASE_NAME = "goyoriderv1.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static Context context;
     public static SQLiteDatabase sqLiteDB;
     private SQLiteStatement insertStmt;
@@ -1826,13 +1826,41 @@ public void Leave_UPDATE_Status(String _created_by, String status){
             switch (oldVersion)
             {
                 case 1://upgrade from version 1 to 2
+                    if(!existsColumnInTable(Tables.tblofflinetask.name,Tables.tblofflinetask.IN_TIME)){
+                        db.execSQL("ALTER TABLE "+Tables.tblofflinetask.name+" ADD COLUMN "+Tables.tblofflinetask.IN_TIME+" VARCHAR");
+                    }
+                    if(!existsColumnInTable(Tables.tblofflinetask.name,Tables.tblofflinetask.OUT_TIME)){
+                        db.execSQL("ALTER TABLE "+Tables.tblofflinetask.name+" ADD COLUMN "+Tables.tblofflinetask.OUT_TIME+" VARCHAR");
+                    }
+                    if(!existsColumnInTable(Tables.tblofflinetask.name,Tables.tblofflinetask.STOP_ID)){
+                        db.execSQL("ALTER TABLE "+Tables.tblofflinetask.name+" ADD COLUMN "+Tables.tblofflinetask.STOP_ID+" VARCHAR");
+                    }
 
                   break;
                 case 2://upgrade from version 2 to 3
-
                     break;
 
             }
+        }
+    }
+
+    private boolean existsColumnInTable(String inTable, String columnToCheck) {
+        Cursor mCursor = null;
+        try {
+            // Query 1 row
+            mCursor = sqLiteDB.rawQuery("SELECT * FROM " + inTable + " LIMIT 0", null);
+
+            // getColumnIndex() gives us the index (0 to ...) of the column - otherwise we get a -1
+            if (mCursor.getColumnIndex(columnToCheck) != -1)
+                return true;
+            else
+                return false;
+
+        } catch (Exception Exp) {
+            // Something went wrong. Missing the database? The table?
+            return false;
+        } finally {
+            if (mCursor != null) mCursor.close();
         }
     }
 
